@@ -29,10 +29,10 @@ Crie uma aplicação web para gerenciar uma Lista de Tarefas. A aplicação deve
 
 ## Requisitos Técnicos
 
-- **Backend:** .NET Core&#10084; ou NodeJS
-- **Frontend:** Angular&#10084; ou React
-- **Banco de Dados:** Postgres&#10084;, MySQL ou SQL Server
-- **Persistência dos dados:** utilize um ORM de sua preferência (EntityFramework Core, Sequelize, TypeORM, etc)
+- **Backend:** .NET Core
+- **Frontend:** Angular
+- **Banco de Dados:** Postgres
+- **Persistência dos dados:** utilize como ORM o EntityFramework Core 
 
 ## Critérios de Avaliação
 
@@ -48,5 +48,5 @@ Crie uma aplicação web para gerenciar uma Lista de Tarefas. A aplicação deve
 
 - Documentação da API (Swagger)
 - Uso do Docker
-- Funcionalidades extras e propostas de melhoria
+- Funcionalidades extras
 
