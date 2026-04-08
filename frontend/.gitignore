@@ -1,0 +1,72 @@
+## Angular
+/dist/
+/tmp/
+/out-tsc/
+/bazel-out/
+
+## Node
+/node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+## IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+*.swp
+*.swo
+*~
+
+## System files
+.DS_Store
+Thumbs.db
+
+## Environment
+.env
+.env.local
+.env.*.local
+
+## Build outputs
+dist/
+build/
+
+## Misc
+.angular/
+*.orig
+.webassets-cache
+.sass-cache/
+.tmp/
+.cache/
+coverage/
+.nyc_output/
+.rpt2_cache/
+.rts2_cache.cjs/
+.rts2_cache.es/
+.rts2_cache.js/
+.rts2_cache.json/
+
+## OS
+*.class
+*.exe
+*.o
+
+## Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
