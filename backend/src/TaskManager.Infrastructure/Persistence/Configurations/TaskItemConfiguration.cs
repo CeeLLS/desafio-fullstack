@@ -27,5 +27,17 @@ public sealed class TaskItemConfiguration : IEntityTypeConfiguration<TaskItem>
 
         builder.Property(x => x.UpdatedAtUtc)
             .IsRequired();
+
+        builder.Property(x => x.DeletedAtUtc);
+
+        builder.Property(x => x.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.HasQueryFilter(x => !x.IsDeleted);
+
+        builder.HasIndex(x => x.Status);
+        builder.HasIndex(x => x.CreatedAtUtc);
+        builder.HasIndex(x => new { x.IsDeleted, x.DeletedAtUtc });
     }
 }
