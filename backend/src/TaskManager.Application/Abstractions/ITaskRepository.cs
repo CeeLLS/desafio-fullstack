@@ -5,10 +5,13 @@ namespace TaskManager.Application.Abstractions;
 
 public interface ITaskRepository
 {
+    Task AddAsync(TaskItem item, CancellationToken ct);
     Task<TaskItem?> GetByIdAsync(Guid id, CancellationToken ct);
     Task<IReadOnlyList<TaskItem>> GetAllAsync(TaskItemStatus? status, CancellationToken ct);
-    Task AddAsync(TaskItem item, CancellationToken ct);
+
+    Task<IReadOnlyList<TaskItem>> GetSoftDeletedOlderThanAsync(int retentionDays, CancellationToken ct);
+
     void Update(TaskItem item);
     void Delete(TaskItem item);
-    Task SaveChangesAsync(CancellationToken ct);
+    Task<int> SaveChangesAsync(CancellationToken ct);
 }

@@ -33,9 +33,21 @@ public sealed class TaskRepository : ITaskRepository
             .ToListAsync(ct);
     }
 
+    public async Task<IReadOnlyList<TaskItem>> GetSoftDeletedOlderThanAsync(
+        int retentionDays,
+        CancellationToken ct)
+    {
+        var cutoff = DateTime.UtcNow.AddDays(-retentionDays);
+
+        return await _db.TaskItems
+            .IgnoreQueryFilters()
+            .Where(x => x.IsDeleted && x.DeletedAtUtc.HasValue && x.DeletedAtUtc.Value <= cutoff)
+            .ToListAsync(ct);
+    }
+
     public void Update(TaskItem item) => _db.TaskItems.Update(item);
 
     public void Delete(TaskItem item) => _db.TaskItems.Remove(item);
 
-    public Task SaveChangesAsync(CancellationToken ct) => _db.SaveChangesAsync(ct);
+    public Task<int> SaveChangesAsync(CancellationToken ct) => _db.SaveChangesAsync(ct);
 }

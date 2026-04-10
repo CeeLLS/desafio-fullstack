@@ -1,0 +1,28 @@
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: task_manager_db
+    environment:
+      POSTGRES_USER: adm
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_DB: taskmanager_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adm -d taskmanager_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - task_manager_net
+ 
+volumes:
+  postgres_data:
+ 
+networks:
+  task_manager_net:
+    driver: bridge
+ 
