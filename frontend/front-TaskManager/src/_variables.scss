@@ -1,0 +1,62 @@
+$primary: #16a34a;
+$primary-dark: #15803d; 
+$primary-light: #14532d;
+$primary-bg: #f0fdf4;  
+$primary-border: #dcfce7;
+
+$secondary: #6366f1;
+$secondary-dark: #4f46e5;
+
+$danger: #dc2626;
+$danger-bg: #fef2f2;
+$danger-border: #fecaca;
+
+$neutral-white: white;
+$neutral-50: #f3f4f6;
+$neutral-100: #f9fafb;
+$neutral-200: #e5e7eb;
+$neutral-300: #d1d5db;
+$neutral-400: #9ca3af;
+$neutral-500: #6b7280;
+$neutral-600: #444;
+$neutral-700: #374151;
+$neutral-900: #111;
+
+$status-colors: (
+  0: (color: #92400e, bg: #fef3c7),
+  1: (color: #1e40af, bg: #dbeafe),
+  2: (color: #14532d, bg: #dcfce7),
+  3: (color: #6b7280, bg: #f3f4f6),
+);
+
+$space: 0.25rem;
+$space-xs: $space;
+$space-sm: $space * 2;
+$space-md: $space * 3;
+$space-lg: $space * 4;
+$space-xl: $space * 5;
+$space-xxl: $space * 6;
+
+$fs-xs: 0.72rem;
+$fs-sm: 0.75rem;
+$fs-base: 0.9rem;
+$fs-lg: 1rem;
+$fs-xl: 1.2rem;
+$fs-xxl: 1.5rem;
+$fs-xxxl: 1.75rem;
+
+$font-stack: 'Segoe UI', system-ui, sans-serif;
+$font-weight-normal: 500;
+$font-weight-bold: 600;
+$font-weight-extra-bold: 700;
+
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+$radius-xl: 12px;
+
+$bp-mobile: 560px;
+$bp-tablet: 900px;
+
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+$transition-fast: 0.15s ease;
