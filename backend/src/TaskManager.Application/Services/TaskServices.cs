@@ -1,3 +1,4 @@
+// Application/Services/TaskService.cs
 using TaskManager.Application.Abstractions;
 using TaskManager.Application.Tasks.Contracts;
 using TaskManager.Domain.Entities;
@@ -20,13 +21,11 @@ public sealed class TaskService : ITaskService
         ct.ThrowIfCancellationRequested();
 
         if (request.Title.Length > MaxTitleLength)
-            throw new ArgumentException($"Title cannot exceed {MaxTitleLength} characters.", nameof(request.Title));
+            throw new ArgumentException($"Title cannot exceed {MaxTitleLength} characters.");
 
         var item = TaskItem.Create(request.Title, request.Description);
-
         await _repository.AddAsync(item, ct);
         await _repository.SaveChangesAsync(ct);
-
         return Map(item);
     }
 
@@ -44,25 +43,24 @@ public sealed class TaskService : ITaskService
 
     public async Task UpdateAsync(Guid id, UpdateTaskRequest request, CancellationToken ct)
     {
-        var item = await _repository.GetByIdAsync(id, ct) 
+        var item = await _repository.GetByIdAsync(id, ct)
             ?? throw new KeyNotFoundException("Task not found.");
 
         if (!Enum.IsDefined(typeof(TaskItemStatus), request.Status))
-            throw new ArgumentException($"Invalid status value: {request.Status}.", nameof(request.Status));
+            throw new ArgumentException($"Invalid status value: {request.Status}.");
 
         if (request.Title.Length > MaxTitleLength)
-            throw new ArgumentException($"Title cannot exceed {MaxTitleLength} characters.", nameof(request.Title));
+            throw new ArgumentException($"Title cannot exceed {MaxTitleLength} characters.");
 
         item.Update(request.Title, request.Description);
         item.ChangeStatus((TaskItemStatus)request.Status);
-
         _repository.Update(item);
         await _repository.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken ct)
     {
-        var item = await _repository.GetByIdAsync(id, ct) 
+        var item = await _repository.GetByIdAsync(id, ct)
             ?? throw new KeyNotFoundException("Task not found.");
 
         item.SoftDelete();
@@ -70,13 +68,20 @@ public sealed class TaskService : ITaskService
         await _repository.SaveChangesAsync(ct);
     }
 
+    public async Task RestoreAsync(Guid id, CancellationToken ct)
+    {
+        // IgnoreQueryFilters pra encontrar a tarefa deletada
+        var item = await _repository.GetByIdIgnoringFiltersAsync(id, ct)
+            ?? throw new KeyNotFoundException("Task not found.");
+
+        if (!item.IsDeleted)
+            return; // já está ativa, idempotente
+
+        item.Restore();
+        _repository.Update(item);
+        await _repository.SaveChangesAsync(ct);
+    }
+
     private static TaskResponse Map(TaskItem item) =>
-        new(
-            item.Id,
-            item.Title,
-            item.Description,
-            (int)item.Status,
-            item.CreatedAtUtc,
-            item.UpdatedAtUtc
-        );
+        new(item.Id, item.Title, item.Description, (int)item.Status, item.CreatedAtUtc, item.UpdatedAtUtc);
 }

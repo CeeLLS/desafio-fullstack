@@ -1,0 +1,108 @@
+<div class="page">
+  <header class="header">
+    <div class="header-left">
+      <span class="logo">✅</span>
+      <div>
+        <h1>Task Manager</h1>
+        <p class="subtitle">{{ taskService.activeTasks().length }} tarefa(s) ativas</p>
+      </div>
+    </div>
+    <button class="btn-primary" (click)="openCreate()">+ Nova tarefa</button>
+  </header>
+
+  @if (taskService.error()) {
+    <div class="error-banner">{{ taskService.error() }}</div>
+  }
+
+  @if (taskService.loading()) {
+    <div class="loading">Carregando tarefas...</div>
+  }
+
+  @if (!taskService.loading()) {
+    <!-- Board kanban -->
+    <div class="board">
+      @for (col of columns; track col.status) {
+        <div class="column">
+          <div class="col-header" [style.background]="col.bg">
+            <span class="col-title" [style.color]="col.color">{{ col.label }}</span>
+            <span class="col-count" [style.color]="col.color">
+              {{ tasksForStatus(col.status).length }}
+            </span>
+          </div>
+
+          <div class="col-body">
+            @for (task of tasksForStatus(col.status); track task.id) {
+              <div class="card">
+                <div class="card-top">
+                  <p class="card-title">{{ task.title }}</p>
+                  <div class="card-actions">
+                    <button class="icon-btn" title="Editar" (click)="openEdit(task)">✏️</button>
+                    <button class="icon-btn" title="Remover" (click)="confirmDelete(task)">🗑️</button>
+                  </div>
+                </div>
+
+                @if (task.description) {
+                  <p class="card-desc">{{ task.description }}</p>
+                }
+
+                <div class="card-footer">
+                  <span class="card-date">{{ task.createdAtUtc | date:'dd/MM/yy' }}</span>
+                  <select
+                    class="status-select"
+                    [ngModel]="task.status"
+                    (ngModelChange)="onStatusChange(task, $event)"
+                  >
+                    @for (opt of statusOptions; track opt.value) {
+                      <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+            }
+
+            @if (tasksForStatus(col.status).length === 0) {
+              <p class="col-empty">Nenhuma tarefa</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Seção de soft-deleted — colapsável -->
+    @if (taskService.deletedTasks().length > 0) {
+      <div class="deleted-section">
+        <button class="deleted-toggle" (click)="showDeleted.set(!showDeleted())">
+          🗂️ Tarefas removidas ({{ taskService.deletedTasks().length }})
+          {{ showDeleted() ? '▲' : '▼' }}
+        </button>
+
+        @if (showDeleted()) {
+          <div class="deleted-list">
+            @for (task of taskService.deletedTasks(); track task.id) {
+              <div class="deleted-card">
+                <div>
+                  <p class="deleted-title">{{ task.title }}</p>
+                  @if (task.description) {
+                    <p class="deleted-desc">{{ task.description }}</p>
+                  }
+                  <p class="deleted-date">
+                    Removida em {{ task.deletedAtUtc | date:'dd/MM/yy HH:mm' }}
+                  </p>
+                </div>
+                <button class="btn-restore" (click)="restore(task)">↩ Restaurar</button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
+
+@if (showForm()) {
+  <app-task-form
+    [task]="editingTask()"
+    (submitted)="onFormSubmit($event)"
+    (cancelled)="closeForm()"
+  />
+}

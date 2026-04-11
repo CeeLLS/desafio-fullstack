@@ -1,0 +1,108 @@
+@import '../../variables';
+@import '../../styles';
+
+.form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  @include flex-center();
+  z-index: 100;
+}
+
+.form-card {
+  background: $neutral-white;
+  border-radius: $radius-xl;
+  padding: $space-xl * 2;
+  width: min(480px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+}
+
+h2 {
+  margin: 0;
+  font-size: $fs-xl;
+  font-weight: $font-weight-bold;
+  color: $neutral-900;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+label {
+  font-size: $fs-sm;
+  font-weight: $font-weight-normal;
+  color: $neutral-600;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid $neutral-300;
+  border-radius: $radius-lg;
+  padding: $space-sm $space-md;
+  font-size: $fs-base;
+  outline: none;
+  font-family: inherit;
+  @include transition(border-color);
+
+  &:focus {
+    @include input-focus();
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+.char-count {
+  font-size: $fs-xs;
+  color: $neutral-400;
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-lg;
+  margin-top: $space-md;
+}
+
+.btn-primary {
+  @include button-reset();
+  background: $secondary;
+  color: $neutral-white;
+  border-radius: $radius-lg;
+  padding: $space-sm $space-lg;
+  font-size: $fs-base;
+  font-weight: $font-weight-normal;
+  @include transition();
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background: $secondary-dark;
+  }
+}
+
+.btn-secondary {
+  @include button-reset();
+  background: transparent;
+  color: $neutral-500;
+  border: 1px solid $neutral-300;
+  border-radius: $radius-lg;
+  padding: $space-sm $space-lg;
+  font-size: $fs-base;
+  @include transition();
+
+  &:hover {
+    background: $neutral-100;
+  }
+}
+
