@@ -1,4 +1,3 @@
-// Application/Services/TaskService.cs
 using TaskManager.Application.Abstractions;
 using TaskManager.Application.Tasks.Contracts;
 using TaskManager.Domain.Entities;
@@ -12,9 +11,7 @@ public sealed class TaskService : ITaskService
     private readonly ITaskRepository _repository;
 
     public TaskService(ITaskRepository repository)
-    {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+        => _repository = repository ?? throw new ArgumentNullException(nameof(repository));
 
     public async Task<TaskResponse> CreateAsync(CreateTaskRequest request, CancellationToken ct)
     {
@@ -38,6 +35,12 @@ public sealed class TaskService : ITaskService
     public async Task<IReadOnlyList<TaskResponse>> GetAllAsync(TaskItemStatus? status, CancellationToken ct)
     {
         var items = await _repository.GetAllAsync(status, ct);
+        return items.Select(Map).ToList();
+    }
+
+    public async Task<IReadOnlyList<TaskResponse>> GetDeletedAsync(CancellationToken ct)
+    {
+        var items = await _repository.GetAllDeletedAsync(ct);
         return items.Select(Map).ToList();
     }
 
@@ -70,12 +73,10 @@ public sealed class TaskService : ITaskService
 
     public async Task RestoreAsync(Guid id, CancellationToken ct)
     {
-        // IgnoreQueryFilters pra encontrar a tarefa deletada
         var item = await _repository.GetByIdIgnoringFiltersAsync(id, ct)
             ?? throw new KeyNotFoundException("Task not found.");
 
-        if (!item.IsDeleted)
-            return; // já está ativa, idempotente
+        if (!item.IsDeleted) return; // idempotente
 
         item.Restore();
         _repository.Update(item);
@@ -83,5 +84,6 @@ public sealed class TaskService : ITaskService
     }
 
     private static TaskResponse Map(TaskItem item) =>
-        new(item.Id, item.Title, item.Description, (int)item.Status, item.CreatedAtUtc, item.UpdatedAtUtc);
+        new(item.Id, item.Title, item.Description, (int)item.Status,
+            item.IsDeleted, item.DeletedAtUtc, item.CreatedAtUtc, item.UpdatedAtUtc);
 }

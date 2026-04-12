@@ -204,13 +204,6 @@ public sealed class TaskItemTests
         Assert.Throws<ArgumentException>(() => task.Update("Titulo", longDesc));
     }
 
-    // [Fact] 
-    // public void Create_WithPriority_SetsPriorityCorrectly()
-    // {
-    //     var task = TaskItem.Create("Titulo", null, priority: TaskPriority.High);
-    //     Assert.Equal(TaskPriority.High, task.Priority);
-    // }
-
     [Fact] 
     public void Create_DueDateInThePast_ThrowsDomainException()
     {
@@ -223,7 +216,6 @@ public sealed class TaskItemTests
     {
         var task = TaskItem.Create("Titulo", null);
 
-        // Hoje (TaskItemStatus)999 não lança — é comportamento incorreto
         Assert.Throws<ArgumentException>(() => task.ChangeStatus((TaskItemStatus)999));
     }
 }

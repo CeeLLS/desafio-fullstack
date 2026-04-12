@@ -37,7 +37,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
  
-// CORS deve vir antes de MapControllers
 app.UseCors("Angular");
 app.MapControllers();
 app.Run();

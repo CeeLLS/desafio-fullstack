@@ -10,6 +10,9 @@
 .header {
   @include flex-between();
   margin-bottom: $space-xxl;
+  background: #eeeeee;
+  padding: $space-lg $space-xl;
+  border-radius: $radius-lg;
 
   @include respond-to('mobile') {
     flex-direction: column;
@@ -22,6 +25,16 @@
   gap: $space-md;
 }
 
+.header-right {
+  @include flex-center();
+  gap: $space-lg;
+ 
+  @include respond-to('mobile') {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
 .logo {
   font-size: $fs-xxxl;
 }
@@ -30,7 +43,7 @@ h1 {
   margin: 0;
   font-size: $fs-xxl;
   font-weight: $font-weight-extra-bold;
-  color: $primary-light;
+  color: #0a0a0a;
 }
 
 .subtitle {
@@ -132,7 +145,7 @@ h1 {
 
 .card {
   @include card-base();
-  border-left: 3px solid $primary;
+  border-left: 3px solid $primary-border;
   display: flex;
   flex-direction: column;
   gap: $space-md;
@@ -292,3 +305,65 @@ h1 {
   }
 }
 
+.search-wrapper {
+  position: relative;
+  @include flex-center();
+}
+ 
+.search-icon {
+  position: absolute;
+  left: $space-md;
+  font-size: $fs-sm;
+  pointer-events: none;
+  opacity: 0.5;
+}
+ 
+.search-input {
+  border: 1px solid $neutral-300;
+  border-radius: $radius-lg;
+  padding: $space-sm $space-md $space-sm ($space-md * 3);
+  font-size: $fs-base;
+  font-family: $font-stack;
+  outline: none;
+  width: 220px;
+  background: $neutral-white;
+  @include transition(border-color);
+ 
+  &:focus {
+    border-color: $primary-dark;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  }
+ 
+  &::placeholder {
+    color: $neutral-400;
+  }
+ 
+  @include respond-to('mobile') {
+    width: 100%;
+  }
+}
+
+.filter-input {
+  border: 1px solid $neutral-300;
+  border-radius: 20px;
+  padding: $space-sm $space-md;
+  font-size: $fs-base;
+  font-family: $font-stack;
+  outline: none;
+  width: 220px;
+  background: $neutral-white;
+  @include transition(border-color);
+ 
+  &:focus {
+    border-color: $neutral-400;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+  }
+ 
+  &::placeholder {
+    color: $neutral-400;
+  }
+ 
+  @include respond-to('mobile') {
+    width: 100%;
+  }
+}

@@ -11,6 +11,7 @@ public interface ITaskRepository
     Task<TaskItem?> GetByIdIgnoringFiltersAsync(Guid id, CancellationToken ct);
  
     Task<IReadOnlyList<TaskItem>> GetAllAsync(TaskItemStatus? status, CancellationToken ct);
+    Task<IReadOnlyList<TaskItem>> GetAllDeletedAsync(CancellationToken ct);
     Task<IReadOnlyList<TaskItem>> GetSoftDeletedOlderThanAsync(int retentionDays, CancellationToken ct);
  
     void Update(TaskItem item);

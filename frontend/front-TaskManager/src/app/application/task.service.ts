@@ -1,5 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { Task, CreateTaskPayload, UpdateTaskPayload, TaskStatus } from '../domain/task.model';
+import { forkJoin } from 'rxjs';
+import { Task, CreateTaskPayload, UpdateTaskPayload } from '../domain/task.model';
 import { TaskRepository } from '../data/task.repository';
 
 @Injectable({ providedIn: 'root' })
@@ -12,18 +13,31 @@ export class TaskService {
 
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
+  readonly searchTerm = signal('');
 
   readonly activeTasks = computed(() => this._allTasks().filter(t => !t.isDeleted));
   readonly deletedTasks = computed(() => this._allTasks().filter(t => t.isDeleted));
-  readonly tasks = this.activeTasks; 
+  readonly tasks = this.activeTasks;
+  
+  readonly filteredActiveTasks = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    if (!term) return this.activeTasks();
+    return this.activeTasks().filter(t =>
+      t.title.toLowerCase().includes(term) ||
+      t.description?.toLowerCase().includes(term)
+    );
+  });
 
   loadAll(): void {
     this._loading.set(true);
     this._error.set(null);
 
-    this.repository.getAll().subscribe({
-      next: tasks => {
-        this._allTasks.set(tasks);
+    forkJoin({
+      active: this.repository.getAll(),
+      deleted: this.repository.getDeleted(),
+    }).subscribe({
+      next: ({ active, deleted }) => {
+        this._allTasks.set([...active, ...deleted]);
         this._loading.set(false);
       },
       error: err => {
