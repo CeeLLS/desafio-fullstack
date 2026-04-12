@@ -18,8 +18,6 @@ public sealed class TaskRepository : ITaskRepository
     public async Task<TaskItem?> GetByIdAsync(Guid id, CancellationToken ct)
         => await _db.TaskItems.FirstOrDefaultAsync(x => x.Id == id, ct);
 
-    // IgnoreQueryFilters: enxerga registros com IsDeleted=true
-    // Necessário para restore — sem isso o EF filtra e retorna null
     public async Task<TaskItem?> GetByIdIgnoringFiltersAsync(Guid id, CancellationToken ct)
         => await _db.TaskItems
             .IgnoreQueryFilters()
@@ -32,6 +30,13 @@ public sealed class TaskRepository : ITaskRepository
             query = query.Where(x => x.Status == status.Value);
         return await query.OrderByDescending(x => x.CreatedAtUtc).ToListAsync(ct);
     }
+
+    public async Task<IReadOnlyList<TaskItem>> GetAllDeletedAsync(CancellationToken ct)
+        => await _db.TaskItems
+            .IgnoreQueryFilters()
+            .Where(x => x.IsDeleted)
+            .OrderByDescending(x => x.DeletedAtUtc)
+            .ToListAsync(ct);
 
     public async Task<IReadOnlyList<TaskItem>> GetSoftDeletedOlderThanAsync(
         int retentionDays, CancellationToken ct)

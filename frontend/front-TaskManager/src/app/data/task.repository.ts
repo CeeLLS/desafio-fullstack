@@ -13,6 +13,10 @@ export class TaskRepository {
     return this.http.get<Task[]>(`${API_BASE}/tasks`);
   }
 
+  getDeleted(): Observable<Task[]> {
+    return this.http.get<Task[]>(`${API_BASE}/tasks/deleted`);
+  }
+
   getById(id: string): Observable<Task> {
     return this.http.get<Task>(`${API_BASE}/tasks/${id}`);
   }

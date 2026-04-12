@@ -7,6 +7,7 @@
         <p class="subtitle">{{ taskService.activeTasks().length }} tarefa(s) ativas</p>
       </div>
     </div>
+    <input class="filter-input" (input)="taskService.searchTerm.set($any($event.target).value)" placeholder="Filtrar tarefas...">
     <button class="btn-primary" (click)="openCreate()">+ Nova tarefa</button>
   </header>
 
@@ -19,7 +20,6 @@
   }
 
   @if (!taskService.loading()) {
-    <!-- Board kanban -->
     <div class="board">
       @for (col of columns; track col.status) {
         <div class="column">
@@ -68,7 +68,6 @@
       }
     </div>
 
-    <!-- Seção de soft-deleted — colapsável -->
     @if (taskService.deletedTasks().length > 0) {
       <div class="deleted-section">
         <button class="deleted-toggle" (click)="showDeleted.set(!showDeleted())">

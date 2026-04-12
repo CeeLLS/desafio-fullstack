@@ -87,8 +87,7 @@ public class TaskItemSoftDeleteTests
     {
         var task = TaskItem.Create("Tarefa", null);
         var createdAt = task.UpdatedAtUtc;
-        System.Threading.Thread.Sleep(100); // Garante diferença de tempo
-
+        System.Threading.Thread.Sleep(100); 
         task.SoftDelete();
 
         Assert.True(task.UpdatedAtUtc > createdAt);

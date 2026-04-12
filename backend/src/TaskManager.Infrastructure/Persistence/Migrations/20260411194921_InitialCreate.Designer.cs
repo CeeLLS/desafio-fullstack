@@ -12,7 +12,7 @@ using TaskManager.Infrastructure.Persistence;
 namespace TaskManager.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260410005650_InitialCreate")]
+    [Migration("20260411194921_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

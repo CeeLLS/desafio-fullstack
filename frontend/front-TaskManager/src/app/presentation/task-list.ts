@@ -39,7 +39,7 @@ export class TaskListComponent implements OnInit {
   }
 
   tasksForStatus(status: TaskStatus): Task[] {
-    return this.taskService.activeTasks().filter(t => t.status === status);
+    return this.taskService.filteredActiveTasks().filter(t => t.status === status);
   }
 
   onStatusChange(task: Task, newStatus: TaskStatus): void {
